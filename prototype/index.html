@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>北美新老师 Month0-Month3 培训地图（原型）</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+
+    <!-- React (CDN) + Babel: 零安装可预览原型 -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- 按依赖顺序加载（不使用打包器，文件间通过 window.App 共享） -->
+    <script type="text/babel" data-presets="react" src="./src/data.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/store.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/ui.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/components.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/pages.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/app.js"></script>
+    <script type="text/babel" data-presets="react" src="./src/main.js"></script>
+  </body>
+</html>

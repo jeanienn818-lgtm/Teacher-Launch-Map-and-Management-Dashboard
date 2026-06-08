@@ -6,7 +6,9 @@ set -euo pipefail
 export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:$PATH"
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-REPO_NAME="${1:-onboarding-summit-map-2.5}"
+REPO_OWNER="${GITHUB_OWNER:-jeanienn818-lgtm}"
+REPO_NAME="${1:-New}"
+REMOTE_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}.git"
 
 if ! command -v gh >/dev/null 2>&1; then
   echo "GitHub CLI (gh) is not installed."
@@ -27,13 +29,17 @@ if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
 fi
 
 if git remote get-url origin >/dev/null 2>&1; then
-  echo "→ Pushing to existing origin…"
+  CURRENT_URL="$(git remote get-url origin)"
+  if [[ "$CURRENT_URL" != "$REMOTE_URL" ]]; then
+    git remote set-url origin "$REMOTE_URL"
+  fi
+  echo "→ Pushing to ${REMOTE_URL} …"
   git push -u origin main
 else
-  echo "→ Creating GitHub repo: $REPO_NAME"
-  gh repo create "$REPO_NAME" --private --source=. --remote=origin --push
+  echo "→ Creating GitHub repo: ${REPO_OWNER}/${REPO_NAME}"
+  gh repo create "${REPO_OWNER}/${REPO_NAME}" --private --source=. --remote=origin --push
 fi
 
 echo ""
 echo "✓ Done. Open your repo:"
-gh repo view --web 2>/dev/null || gh repo view "$(gh api user -q .login)/$REPO_NAME" --json url -q .url
+gh repo view "${REPO_OWNER}/${REPO_NAME}" --web 2>/dev/null || echo "https://github.com/${REPO_OWNER}/${REPO_NAME}"

@@ -396,6 +396,7 @@ export function TargetIncomePlannerPanel({
 
   const plan = useMemo(() => calcReverseSlotPlan(effectiveInput, salaryTier), [effectiveInput, salaryTier])
   const pptOpenMetricLabel = input.pptSlotsEntered ? 'YOUR PPT OPEN' : 'Recommended PPT open'
+  const targetIncomeLabel = `$${Math.max(0, input.targetMonthlyIncome || 0).toLocaleString()}`
 
   const updateTarget = (value: string) => {
     const num = parseOptionalInt(value)
@@ -437,10 +438,13 @@ export function TargetIncomePlannerPanel({
     <div className="slot-planner-stack">
       <section className="card slot-planner-panel slot-planner-panel--peak slot-planner-planner">
         <div className="slot-planner-panel-head">
-          <h3 className="slot-planner-panel-title">Target Monthly Income Planner</h3>
-          <span className="chip chip--peak">Goal-first</span>
+          <div>
+            <span className="slot-planner-section-eyebrow">Income goal</span>
+            <h3 className="slot-planner-panel-title">Target Monthly Income Planner</h3>
+          </div>
+          <span className="chip chip--peak">Plan first</span>
         </div>
-        <p className="slot-planner-kicker">Set a monthly income goal—see how many slots to complete and open.</p>
+        <p className="slot-planner-kicker">Start with the monthly income you want, then check whether your open slots can support it.</p>
         <p className="slot-planner-tier-line">
           <strong>Active tier</strong> · {tierLabel} <span className="slot-planner-tier-note">(system)</span>
         </p>
@@ -511,6 +515,12 @@ export function TargetIncomePlannerPanel({
                 aria-labelledby="slot-ppt-field-label"
               />
             </div>
+          </div>
+          <details className="slot-planner-optional-details">
+            <summary className="slot-planner-optional-summary">
+              <span>Optional incentives</span>
+              <small>Trial conversion +$5 each</small>
+            </summary>
             <label className="slot-planner-field slot-planner-field--trial">
               <span className="slot-planner-field-label">Trial Conversion Incentive</span>
               <span className="slot-planner-field-hint">Optional · +$5 each</span>
@@ -523,64 +533,62 @@ export function TargetIncomePlannerPanel({
                 onChange={(e) => updateTrial(e.target.value)}
               />
             </label>
-          </div>
+          </details>
         </div>
 
         <div className="slot-planner-results slot-planner-results--peak" aria-live="polite">
-          <h4 className="slot-planner-results-title">Required Slots to Reach Your Goal</h4>
-          <div className="peak-metric slot-planner-metric slot-planner-metric--completed">
-            <span className="peak-metric-label">Required total completed slots</span>
-            <span className="peak-metric-value slot-planner-metric-value--completed">
-              <strong>{plan.requiredTotalCompletedSlots}</strong>
-            </span>
-            <span className="peak-metric-unit">completed</span>
+          <div className="slot-planner-goal-summary">
+            <span className="slot-planner-goal-summary__label">To reach {targetIncomeLabel}/month</span>
+            <strong>{plan.requiredTotalCompletedSlots} completed slots</strong>
+            <span>with about {plan.recommendedTotalOpenSlots} open slots planned.</span>
           </div>
-          <div className="peak-metrics-row peak-metrics-row--widget slot-planner-open-metrics">
-            <div className="peak-metric slot-planner-metric slot-planner-metric--open">
-              <span className="peak-metric-label">{pptOpenMetricLabel}</span>
-              <span className="peak-metric-value slot-planner-metric-value--open">
-                <strong>{plan.recommendedPptOpenSlots}</strong>
-              </span>
-              <span className="peak-metric-unit">slots</span>
-            </div>
-            <div className="peak-metric slot-planner-metric slot-planner-metric--open">
-              <span className="peak-metric-label">Recommended non-PPT open</span>
-              <span className="peak-metric-value slot-planner-metric-value--open">
-                <strong>{plan.recommendedNonPptOpenSlots}</strong>
-              </span>
-              <span className="peak-metric-unit">slots</span>
-            </div>
-            <div className="peak-metric peak-metric--highlight slot-planner-metric slot-planner-metric--open-total">
-              <span className="peak-metric-label">Recommended total open</span>
-              <span className="peak-metric-value slot-planner-metric-value--open">
-                <strong>{plan.recommendedTotalOpenSlots}</strong>
-              </span>
-              <span className="peak-metric-unit">slots</span>
-            </div>
+          <div className="slot-planner-compact-breakdown" aria-label="Recommended open slot breakdown">
+            <span>
+              <em>{pptOpenMetricLabel}</em>
+              <strong>{plan.recommendedPptOpenSlots}</strong>
+            </span>
+            <span>
+              <em>Non-PPT open</em>
+              <strong>{plan.recommendedNonPptOpenSlots}</strong>
+            </span>
+            <span>
+              <em>Total open</em>
+              <strong>{plan.recommendedTotalOpenSlots}</strong>
+            </span>
           </div>
         </div>
+        <ol className="slot-planner-action-path" aria-label="Income planning sequence">
+          <li>Set income target</li>
+          <li>Open enough PPT and non-PPT slots</li>
+          <li>Complete training steps that unlock stronger booking chances</li>
+        </ol>
         <small className="slot-planner-footnote">Estimate only. Final pay is based on the official statement.</small>
       </section>
 
       <section className="card slot-planner-panel slot-planner-panel--tips" aria-label="Extra income and growth tips">
-        <h3 className="slot-planner-panel-title slot-planner-panel-title--tips">More to Earn</h3>
-        <ul className="slot-planner-tip-cards">
-          <li className="slot-planner-tip-card">
-            <strong>PB / JG / LR classes are 50mins: +$4 each</strong>
-          </li>
-          <li className="slot-planner-tip-card">
-            <strong>Short-notice completed slots (booked within 24h of class time): +$2 each</strong>
-          </li>
-          <li className="slot-planner-tip-card">
-            <strong>Refer 1 new teacher who starts teaching: +$100</strong>
-          </li>
-          <li className="slot-planner-tip-card">
-            <strong>
-              After teaching for 2 contract periods, you may join more special projects and become a Mentor from the 3rd
-              contract period
-            </strong>
-          </li>
-        </ul>
+        <details className="slot-planner-tips-details">
+          <summary className="slot-planner-tips-summary">
+            <span className="slot-planner-panel-title slot-planner-panel-title--tips">More to Earn</span>
+            <small>Extra income opportunities</small>
+          </summary>
+          <ul className="slot-planner-tip-cards">
+            <li className="slot-planner-tip-card">
+              <strong>PB / JG / LR classes are 50mins: +$4 each</strong>
+            </li>
+            <li className="slot-planner-tip-card">
+              <strong>Short-notice completed slots (booked within 24h of class time): +$2 each</strong>
+            </li>
+            <li className="slot-planner-tip-card">
+              <strong>Refer 1 new teacher who starts teaching: +$100</strong>
+            </li>
+            <li className="slot-planner-tip-card">
+              <strong>
+                After teaching for 2 contract periods, you may join more special projects and become a Mentor from the 3rd
+                contract period
+              </strong>
+            </li>
+          </ul>
+        </details>
       </section>
     </div>
     <PptBelowAverageAlert open={pptBelowAvgAlertOpen} onClose={() => setPptBelowAvgAlertOpen(false)} />

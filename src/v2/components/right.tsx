@@ -67,8 +67,8 @@ interface RewardStatusPanelProps {
 export function RewardStatusPanel({ isTop30, gapPoints, simulationDelta = 0 }: RewardStatusPanelProps) {
   return (
     <section className={`card reward-card reward-card--v26 ${isTop30 ? 'win' : ''}`}>
-      <h3>Fast Learner Top 30% Lucky Draw</h3>
-      <p className="reward-fast-learn-hint-v26">Finish tasks early to improve your draw chance.</p>
+      <h3>Early Completion Rewards</h3>
+      <p className="reward-fast-learn-hint-v26">Finish high-value tasks earlier to improve your draw chance.</p>
       <p className="reward-status-v26">{isTop30 ? "You're in." : `${gapPoints} points away`}</p>
       <p className="reward-list-heading-v26">Rewards:</p>
       <ul className="reward-bullets-v26">
@@ -102,7 +102,8 @@ export function NextStepPanel({
 
   return (
     <section className={`card next-step-card next-step-card--v26${mapLinked ? ' next-step-card--map-linked' : ''}`}>
-      <h3>Next Step</h3>
+      <span className="next-step-kicker-v26">Today’s best action</span>
+      <h3>Next Step Toward Stable Bookings</h3>
       {primary ? (
         <>
           <div className="next-step-chips-v26" aria-label="Step highlights">

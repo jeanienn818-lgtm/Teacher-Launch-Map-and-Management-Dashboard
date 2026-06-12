@@ -454,7 +454,7 @@ export function TeacherTrainingDashboardV2({
     return n?.status === 'completed'
   }, [learningRoute, allNodes])
 
-  const assetBase = typeof window !== 'undefined' ? window.location.origin : ''
+  const assetBase = typeof window !== 'undefined' ? window.location.href.split('#')[0] : ''
 
   const dinoBranchTotal = useMemo(() => dash.branch.filter((n) => n.group === 'dino').length, [dash.branch])
   const dinoDoneCount = allNodes.filter((n) => n.group === 'dino' && n.status === 'completed').length

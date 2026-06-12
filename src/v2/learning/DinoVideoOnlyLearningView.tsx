@@ -3,9 +3,7 @@ import type { LearningSessionProps } from './types'
 
 function absUrl(assetBase: string, path: string) {
   if (path.startsWith('http')) return path
-  const base = assetBase.replace(/\/$/, '')
-  const rel = path.startsWith('/') ? path : `/${path}`
-  return `${base}${encodeURI(rel)}`
+  return new URL(path, assetBase).toString()
 }
 
 export interface DinoVideoOnlyLearningViewProps extends LearningSessionProps {

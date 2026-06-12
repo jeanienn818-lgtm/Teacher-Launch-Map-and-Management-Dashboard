@@ -23,8 +23,8 @@ export function PdfLearningView({
   showMarkCompleted = true,
 }: PdfLearningViewProps) {
   const fileUrl = useMemo(() => {
-    const path = material.file.startsWith('/') ? material.file : `/${material.file}`
-    return `${assetBase.replace(/\/$/, '')}${encodeURI(path)}`
+    if (material.file.startsWith('http')) return material.file
+    return new URL(material.file, assetBase).toString()
   }, [assetBase, material.file])
 
   return (

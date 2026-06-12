@@ -28,6 +28,15 @@ const INCOMPLETE_STEP_FOCUS_SHAKE_MS = 5000
 const TIP_W = 236
 const TIP_H = 118
 
+const STEP_INCOME_IMPACTS = [
+  'Earn the basic certificate needed to start teaching eligible classes.',
+  'Add in-demand certificates so more student requests can match your profile.',
+  'Practice trial-class delivery to improve conversion into regular students.',
+  'Learn booking habits that protect steady weekly student demand.',
+  'Sharpen time management and regular-student routines for higher slot fill.',
+  'Prepare for peak-time performance and long-term growth opportunities.',
+] as const
+
 function mainPathCircleClass(done: boolean, doing: boolean): string {
   const base = 'map-hotspot-circle map-hotspot-circle--v28 map-path-circle'
   if (done) return `${base} map-path-circle--v212-main-done`
@@ -455,6 +464,12 @@ export function StepMapSection({
     const category = isSummit ? SUMMIT_CATEGORY : (MAIN_STEP_CATEGORIES[stepIndex] ?? 'Step')
     const mainNode = !isSummit ? mainNodes[stepIndex] : null
     const stepAllDone = stepVisualStates[stepIndex] === 'all-done'
+    const stepStatusLabel = stepAllDone
+      ? 'Completed'
+      : stepVisualStates[stepIndex] === 'all-todo'
+        ? 'To do'
+        : 'In progress'
+    const stepTaskCount = stepNodesByIndex[stepIndex]?.length ?? 0
     const workshopBookedLabel =
       stepIndex === 3
         ? workshopBookedCountLabel(workshopBookedCounts.step4)
@@ -477,8 +492,13 @@ export function StepMapSection({
           className={`map-step-card summit-grid-card ${stepCardStateClass(stepIndex)} ${isSummit ? 'summit-grid-card--summit' : ''} ${revealed ? 'summit-grid-card--revealed' : ''}`}
         >
           <div className="summit-grid-card__header">
-            <span className="map-step-card__num">STEP {stepIndex + 1}</span>
+            <div className="map-step-card__topline">
+              <span className="map-step-card__num">STEP {stepIndex + 1}</span>
+              <span className="map-step-card__status">{stepStatusLabel}</span>
+            </div>
             <span className="map-step-card__title">{category}</span>
+            <span className="map-step-card__impact">{STEP_INCOME_IMPACTS[stepIndex]}</span>
+            <span className="map-step-card__task-count">{stepTaskCount} task{stepTaskCount === 1 ? '' : 's'}</span>
             {mockBookedLabel ? (
               <span className="map-step-card__mock-booked">{mockBookedLabel}</span>
             ) : null}
@@ -550,14 +570,16 @@ export function StepMapSection({
     <section className="step-map-section step-map-section--v28 step-map-section--v211 step-map-section--v212 step-map-section--grid-map">
       <header className="step-map-header step-map-header--v28">
         <div className="step-map-header-row">
-          <h2>Your Pathway to Teaching Success</h2>
+          <div>
+            <span className="step-map-eyebrow">Training path</span>
+            <h2>6-Step Income Growth Path</h2>
+          </div>
         </div>
         <p className="step-map-urgency-banner" role="status">
-          Complete every Step below as soon as you can—finish earlier to gain more stable students and steady
-          bookings.
+          Complete the right certificates, mocks, and workshops earlier to improve booking stability and move closer to your income goal.
         </p>
         <p className="step-map-dek-v28">
-          Hover a step card to see its tasks—click a circle to open details.
+          Each step turns scattered training materials into one clear action path. Hover a card to see tasks, then click a circle to open details.
         </p>
         {progressSummary ? (
           <div className="map-top-progress-wrap-v214 map-top-progress-wrap-v214--bonus-only">

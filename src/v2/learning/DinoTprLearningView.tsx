@@ -5,8 +5,7 @@ import { MATERIAL_PATHS } from './materialPaths'
 
 function absUrl(assetBase: string, path: string) {
   if (path.startsWith('http')) return path
-  const base = assetBase.replace(/\/$/, '')
-  return `${base}${path.startsWith('/') ? path : `/${path}`}`
+  return new URL(path, assetBase).toString()
 }
 
 export function DinoTprLearningView({

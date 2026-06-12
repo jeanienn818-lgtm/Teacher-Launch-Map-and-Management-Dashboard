@@ -57,8 +57,8 @@ export function ImageLearningView({
 }: ImageLearningViewProps) {
   const autoMarkedRef = useRef(false)
   const imageUrl = useMemo(() => {
-    const path = material.file.startsWith('/') ? material.file : `/${material.file}`
-    return `${assetBase.replace(/\/$/, '')}${encodeURI(path)}`
+    if (material.file.startsWith('http')) return material.file
+    return new URL(material.file, assetBase).toString()
   }, [assetBase, material.file])
 
   const downloadName = useMemo(() => fileNameFromPath(material.file), [material.file])
